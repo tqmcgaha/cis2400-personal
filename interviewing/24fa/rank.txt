@@ -1,14 +1,48 @@
+// high 4
+Joy Liu
 Keith
-----------
+August Fu
+
+// mid 4
 Ethan
----------
-Iassc   (ESE and knows stuff, but not the best with empathy)
+sid (freshie, knew the material, gooat debugging, cares about makign sure specs are good)
+
+// low 4
+Yousef (had decent answers to the coursse content and brought up weingarten tutorind. read the compiler message and fixed the malloc issue. Did GDB for debugging for rest before time)
+
+May have a committe dedicated towards struggling students
+
+----------
+// High 3
+vivi (Good energy, and decent questions on things. OH was good at finding bugs, not the best for checking my understanding. Also ahd some misunderstandings of her own)
+Michelle (good energy and thoughts, was very hands on with the OH though and was solving bugs for the student. Also did not prompt the office hours correctly, tho we did prompt it over email)
+Eric (Cares about the mateiral and is a second year. Has some opinions I disagree with, but that is ok. H took the lead a lot with Office hours though)
+
+// mid 3
 Yu      (Passionate)
+
+// low 3
 Xinyuan (ex TA, was ok??, C thing was eh. said something wrong but got it working by telling people wha to do)
-cameron (blond curly hair, new material vaugley but kinda stoic in a not good way)
+Mohit (Frehman Comp E, empathy and discussion was meh, but oh was good in someways. He walk ed through line by line to help people show how he debugs and had student explain their code some.)
+tin (Empathy was hard for him, but he was honest and did decent by the end. His OH was stuck on trying to figure out the bug and didn't find it. Did promot gdb tho)
+
 ---------
-Joseph (said something good about abstraction)
-Destynn
+// high 2
+cameron (blond curly hair, new material vaugley but kinda stoic in a not good way)
+Iassc   (ESE and knows stuff, but not the best with empathy)
+
+// mid 2
+Joseph (said something good about abstraction, but did not know the C stuff at all)
+Destynn (don't remember office hours. Wanted to move to circuit lab and did not empathise with student that well. Focued more on what stuff they struggle with, did they attend lecture etc. Encourages them to be "annoying on ed", it is a saviour)  
+
+// low 2
+
+---------
+// high 1
+
+// mid 1
+
+// low 1
 ---------
 
 
