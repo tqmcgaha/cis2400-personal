@@ -9,11 +9,16 @@ sid (freshie, knew the material, gooat debugging, cares about makign sure specs 
 
 // low 4
 Yousef (had decent answers to the coursse content and brought up weingarten tutorind. read the compiler message and fixed the malloc issue. Did GDB for debugging for rest before time)
+Iain (had good thoughts on community stuff, and goog practice with debugging oh, but his C knowledge was wrong. Thought that str[i] does not aso derefernce (e.g. he thought it was `str + i` instead of `*(str + i)`)
+Hassan (Cares, needs practice with public speaking. Great OH, but was a bit slow. Had some good thoughts, but not that interesting. Used GDB to make sure students understood the problem when he found it (the malloc str in duplicate))
 
 May have a committe dedicated towards struggling students
 
 ----------
 // High 3
+
+Angie  (not the most insightful responses, but still had some student empathy nad noticed the basics nede to be covered better. Had mostly good office hours to ask if students understood issue and seemed to have some decent C knowledge)
+
 vivi (Good energy, and decent questions on things. OH was good at finding bugs, not the best for checking my understanding. Also ahd some misunderstandings of her own)
 Michelle (good energy and thoughts, was very hands on with the OH though and was solving bugs for the student. Also did not prompt the office hours correctly, tho we did prompt it over email)
 Eric (Cares about the mateiral and is a second year. Has some opinions I disagree with, but that is ok. H took the lead a lot with Office hours though)
