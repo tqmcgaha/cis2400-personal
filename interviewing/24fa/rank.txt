@@ -6,11 +6,15 @@ August Fu
 // mid 4
 Ethan
 sid (freshie, knew the material, gooat debugging, cares about makign sure specs are good)
+adam
 
 // low 4
 Yousef (had decent answers to the coursse content and brought up weingarten tutorind. read the compiler message and fixed the malloc issue. Did GDB for debugging for rest before time)
-Iain (had good thoughts on community stuff, and goog practice with debugging oh, but his C knowledge was wrong. Thought that str[i] does not aso derefernce (e.g. he thought it was `str + i` instead of `*(str + i)`)
+Iain (had good thoughts on community stuff, and good practice with debugging oh, but his C knowledge was wrong. Thought that str[i] does not aso derefernce (e.g. he thought it was `str + i` instead of `*(str + i)`)
 Hassan (Cares, needs practice with public speaking. Great OH, but was a bit slow. Had some good thoughts, but not that interesting. Used GDB to make sure students understood the problem when he found it (the malloc str in duplicate))
+Daniel (has good thoughts and expereince in the course, useful to know how farmer ran things. A bit concerned since he is head TA and I heard bad things about how 5930 in 23fa and 2400 is currently going)
+
+joan
 
 May have a committe dedicated towards struggling students
 
@@ -18,15 +22,22 @@ May have a committe dedicated towards struggling students
 // High 3
 
 Angie  (not the most insightful responses, but still had some student empathy nad noticed the basics nede to be covered better. Had mostly good office hours to ask if students understood issue and seemed to have some decent C knowledge)
+yichen (good at explaining in office hours. Only foud malloc but made sure I understood it and aksed questions to lead to it. other questions were fine.).
 
 vivi (Good energy, and decent questions on things. OH was good at finding bugs, not the best for checking my understanding. Also ahd some misunderstandings of her own)
 Michelle (good energy and thoughts, was very hands on with the OH though and was solving bugs for the student. Also did not prompt the office hours correctly, tho we did prompt it over email)
 Eric (Cares about the mateiral and is a second year. Has some opinions I disagree with, but that is ok. H took the lead a lot with Office hours though)
+maya
+sydnie-shea
 
 // mid 3
 Yu      (Passionate)
+Jerry  (was meh on everyhting expect knowing the content, but it would probalby be really helpful to have a former 5710 TA on staff and he will return for 3800 in spring)
+caroline (had good answers on the office hours and recitation things being good. Was nervious during the OH and not sure what to do for some of it. had to stop and pause to think and read code. Sounded a little panicked. found most of the bugs (a little over tim tho) but didn't explain why they were bugs other than the null terminator)
+Erik (had good thoughts on the usefluness of reictaions and how they can be more tuned to homeworsk, wants to be involved. has thoughts on student struggle and how part of it is a "mindset" which may be weird, but gets to growth sorta. Found the len+1 bug)
 
 // low 3
+alexander (good quesitons and thoughts on how translating binary is not useful, get deeper than that. Oh was not good though, he fixed a lot but he was firmly doing it. Almost like he was solving puzzles)
 Xinyuan (ex TA, was ok??, C thing was eh. said something wrong but got it working by telling people wha to do)
 Mohit (Frehman Comp E, empathy and discussion was meh, but oh was good in someways. He walk ed through line by line to help people show how he debugs and had student explain their code some.)
 tin (Empathy was hard for him, but he was honest and did decent by the end. His OH was stuck on trying to figure out the bug and didn't find it. Did promot gdb tho)
@@ -44,6 +55,7 @@ Destynn (don't remember office hours. Wanted to move to circuit lab and did not 
 
 ---------
 // high 1
+zak (answers to questions were mediocre, graduated, and oh was mostly him staring at the code and the one thnig he said has a kernel of truth but C automaitcall scales pointer arith for you)
 
 // mid 1
 
