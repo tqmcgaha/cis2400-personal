@@ -23,12 +23,13 @@ May have a committe dedicated towards struggling students
 
 Angie  (not the most insightful responses, but still had some student empathy nad noticed the basics nede to be covered better. Had mostly good office hours to ask if students understood issue and seemed to have some decent C knowledge)
 yichen (good at explaining in office hours. Only foud malloc but made sure I understood it and aksed questions to lead to it. other questions were fine.).
-
+eddy
 vivi (Good energy, and decent questions on things. OH was good at finding bugs, not the best for checking my understanding. Also ahd some misunderstandings of her own)
 Michelle (good energy and thoughts, was very hands on with the OH though and was solving bugs for the student. Also did not prompt the office hours correctly, tho we did prompt it over email)
 Eric (Cares about the mateiral and is a second year. Has some opinions I disagree with, but that is ok. H took the lead a lot with Office hours though)
 maya
 sydnie-shea
+meghana
 
 // mid 3
 Yu      (Passionate)
