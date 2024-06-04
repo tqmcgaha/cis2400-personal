@@ -33,9 +33,9 @@ fn hello(a, b) {
   let c;
   c = 0;
 
-  c += a;
+  c = c + a;
 
-  b += c;
+  b = b + c;
 
 
   print_int(a);
@@ -49,8 +49,9 @@ fn howdy(a, b) {
   i = b;
   
   while (i) {
-    a += 1;
-    i -= 1;
+    a = a + 1;
+    i = i - 1;
   }
 
+  return 0;
 }

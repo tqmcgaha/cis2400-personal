@@ -7,6 +7,8 @@ For your RV32, what issues have you had?
 Do you have a single cycle data path diagram?
 
 What is the word size and addressability of the processor you build?
+  - word size is 32 bites
+  - addressability is 1 byte
 
 Do you follow any specific calling conventions?
 
@@ -21,4 +23,11 @@ Any OS implementation stuff?
 
 - cut the fences
 
+- risscv instructions and registers are word size
+  - memory is byte addressible 
+
+
+Cross compoilation!!!!
+- clang --target=riscv32 -S cstdlib.c
+  works!!!
 
