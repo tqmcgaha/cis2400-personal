@@ -52,10 +52,15 @@ char* str_duplicate(char* str) {
     len++;
     str++;
   }
-  char res[len]; // did a drawing to explain we are returning ptr to beginning
+
+  // getting to sizeof(char) * 
+  char res[len + 1] = malloc(len + 1);
+
   for (int i = 0; i < len; i++) {
     res[i] = str[i];
   }
+
+  res[len] = '\0';
   return res;
 }
 

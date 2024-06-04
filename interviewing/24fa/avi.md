@@ -29,7 +29,7 @@ Questions:
  - common confusion point is what HW is doing
    - first day assignment is out, go talk to TA to figure out what assignment is doing
 
-  // somethinsomething blacked out
+  // something something blacked out
 
 - A student comes to OH and asks for advice on how to approach problems in the course, what advice do you give?
   -

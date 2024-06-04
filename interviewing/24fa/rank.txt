@@ -14,7 +14,8 @@ Iain (had good thoughts on community stuff, and good practice with debugging oh,
 Hassan (Cares, needs practice with public speaking. Great OH, but was a bit slow. Had some good thoughts, but not that interesting. Used GDB to make sure students understood the problem when he found it (the malloc str in duplicate))
 Daniel (has good thoughts and expereince in the course, useful to know how farmer ran things. A bit concerned since he is head TA and I heard bad things about how 5930 in 23fa and 2400 is currently going)
 
-joan
+perrie (had interesting thoughts, was very thoughtful)
+joan   (good thoughts on there not being one kind of person who "gets it", good thoughs on intro to C stuff)
 
 May have a committe dedicated towards struggling students
 
@@ -26,16 +27,18 @@ yichen (good at explaining in office hours. Only foud malloc but made sure I und
 eddy
 vivi (Good energy, and decent questions on things. OH was good at finding bugs, not the best for checking my understanding. Also ahd some misunderstandings of her own)
 Michelle (good energy and thoughts, was very hands on with the OH though and was solving bugs for the student. Also did not prompt the office hours correctly, tho we did prompt it over email)
-Eric (Cares about the mateiral and is a second year. Has some opinions I disagree with, but that is ok. H took the lead a lot with Office hours though)
-maya
-sydnie-shea
+maya (Had good answer for student empathy to show them waht they do know. Had decent office hours and ways to contribute. Ed and hw spec)
+sydnie-shea (SWE for 3 years, incoming mse. Stated she didn't subscribe to the idea that someone can or can't get it.  A little rust on C, but I see potential)
 meghana
+Garret (reminds me of me and dad. Somewhat traditional but I see potential in him)
 
 // mid 3
+Eric (Cares about the mateiral and is a second year. Has some opinions I disagree with, but that is ok. H took the lead a lot with Office hours though)
 Yu      (Passionate)
 Jerry  (was meh on everyhting expect knowing the content, but it would probalby be really helpful to have a former 5710 TA on staff and he will return for 3800 in spring)
 caroline (had good answers on the office hours and recitation things being good. Was nervious during the OH and not sure what to do for some of it. had to stop and pause to think and read code. Sounded a little panicked. found most of the bugs (a little over tim tho) but didn't explain why they were bugs other than the null terminator)
 Erik (had good thoughts on the usefluness of reictaions and how they can be more tuned to homeworsk, wants to be involved. has thoughts on student struggle and how part of it is a "mindset" which may be weird, but gets to growth sorta. Found the len+1 bug)
+claire (Had good debugging skills, not the best teacihng skills for this. I see potential) 
 
 // low 3
 alexander (good quesitons and thoughts on how translating binary is not useful, get deeper than that. Oh was not good though, he fixed a lot but he was firmly doing it. Almost like he was solving puzzles)
@@ -45,6 +48,7 @@ tin (Empathy was hard for him, but he was honest and did decent by the end. His 
 
 ---------
 // high 2
+avi
 cameron (blond curly hair, new material vaugley but kinda stoic in a not good way)
 Iassc   (ESE and knows stuff, but not the best with empathy)
 
