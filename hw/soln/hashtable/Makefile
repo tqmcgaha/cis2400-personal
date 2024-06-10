@@ -21,7 +21,7 @@ CXXFLAGS += -g3 -Wall -Wpedantic -Wextra -std=c++23
 all: test_suite
 
 test_suite: test_suite.o test_deque.o Deque.o catch.o
-	$(CXX) $(CXXFLAGS) -o test_suite test_suite.o catch.o test_deque.o
+	$(CXX) $(CXXFLAGS) -o test_suite test_suite.o catch.o test_deque.o Deque.o
 
 Deque.o: Deque.c Deque.h Deque_priv.h
 	$(CC) $(CFLAGS) -c Deque.c

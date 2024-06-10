@@ -68,9 +68,9 @@ Deque* Deque_Allocate(void);
 // Arguments:
 // - dq: the deque to free.  It is unsafe to use "dq" after this
 //   function returns.
-// - payload_free_function: a pointer to a payload freeing function; see above
+// - payload_free_fn: a pointer to a payload freeing function; see above
 //   for details on what this is.
-void Deque_Free(Deque *dq, DQPayloadFreeFnPtr payload_free_function);
+void Deque_Free(Deque *dq, DQPayloadFreeFnPtr payload_free_fn);
 
 // Return the number of elements in the deque.
 //
@@ -86,7 +86,7 @@ int Deque_Size(Deque *dq);
 // Arguments:
 // - dq: the Deque to push onto.
 // - payload: the payload to push to the front
-void Deque_Push_Front(Deque *dq, DQPayload_t payload);
+bool Deque_Push_Front(Deque *dq, DQPayload_t payload);
 
 // Pop an element from the front of the deque.
 //
@@ -119,7 +119,7 @@ bool Deque_Peek_Front(Deque *dq, DQPayload_t *payload_ptr);
 // Arguments:
 // - dq: the Deque to push onto.
 // - payload: the payload to push to the end
-void Deque_Push_Back(Deque *dq, DQPayload_t payload);
+bool Deque_Push_Back(Deque *dq, DQPayload_t payload);
 
 // Pops an element from the end of the deque.
 //
@@ -237,7 +237,7 @@ void DQIterator_Get(DQIterator *iter, DQPayload_t *payload);
 //
 // Arguments:
 // - iter:  the iterator to delete from.
-// - payload_free_function: invoked to free the payload.
+// - payload_free_fn: invoked to free the payload.
 //
 // Returns:
 // - true if the deletion succeeded, the deque is still non-empty,
@@ -246,7 +246,7 @@ void DQIterator_Get(DQIterator *iter, DQPayload_t *payload);
 // - false if the deletion succeeded, but the deque is now empty.
 //   and thus the iterator is now invalid.
 bool DQIterator_Remove(DQIterator *iter,
-                       DQPayloadFreeFnPtr payload_free_function);
+                       DQPayloadFreeFnPtr payload_free_fn);
 
 // Rewind an iterator to the front of its deque.
 //
