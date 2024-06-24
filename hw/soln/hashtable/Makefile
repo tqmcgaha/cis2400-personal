@@ -20,8 +20,8 @@ CXXFLAGS += -g3 -Wall -Wpedantic -Wextra -std=c++23
 
 all: test_suite
 
-test_suite: test_suite.o test_deque.o Deque.o catch.o
-	$(CXX) $(CXXFLAGS) -o test_suite test_suite.o catch.o test_deque.o Deque.o
+test_suite: test_suite.o test_deque.o Deque.o test_hashtable.o HashTable.o catch.o
+	$(CXX) $(CXXFLAGS) -o test_suite test_suite.o catch.o test_deque.o Deque.o test_hashtable.o HashTable.o
 
 Deque.o: Deque.c Deque.h Deque_priv.h
 	$(CC) $(CFLAGS) -c Deque.c
@@ -32,8 +32,11 @@ HashTable.o: HashTable.c HashTable.h HashTable_priv.h Deque.h
 test_suite.o: test_suite.cpp Deque.h catch.hpp
 	$(CXX) $(CXXFLAGS) -c test_suite.cpp
 
-test_deque.o: test_deque.cpp Deque.h catch.hpp
+test_deque.o: test_deque.cpp Deque.h Deque_priv.h catch.hpp
 	$(CXX) $(CXXFLAGS) -c test_deque.cpp
+
+test_hashtable.o: test_hashtable.cpp HashTable.h HashTable_priv.h catch.hpp
+	$(CXX) $(CXXFLAGS) -c test_hashtable.cpp
 
 catch.o: catch.cpp catch.hpp
 	$(CXX) $(CXXFLAGS) -c catch.cpp
