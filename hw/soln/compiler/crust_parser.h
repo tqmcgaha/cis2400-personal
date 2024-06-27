@@ -17,6 +17,7 @@ typedef enum {
   IF, ELSE, WHILE,
   LPAREN, RPAREN,
   LBRACE, RBRACE,
+  ERROR,
 } crust_token_type;
 
 typedef struct crust_token_st {
@@ -28,7 +29,7 @@ typedef struct crust_token_st {
   int64_t literal_value;
 
   // used by IDENT token
-  char name[MAX_TOKEN_LENGTH]
+  char name[MAX_TOKEN_LENGTH];
 
   // feel free to add other fields
 } crust_token;
@@ -36,6 +37,7 @@ typedef struct crust_token_st {
 typedef struct crust_parser_st {
   // TODO: put some stuff here
   FILE* file;
+  char buffer;
 } crust_parser;
 
 static_assert(sizeof(crust_parser) <= 128);

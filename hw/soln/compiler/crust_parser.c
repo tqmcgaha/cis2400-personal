@@ -1,5 +1,9 @@
 #include "./crust_parser.h"
 
+static bool isdelim(char c) {
+  return isspace(c) || c == ',' || c == '(' || c == ')' || c == '{' || c == '}';
+}
+
 static bool next_word(crust_parser* parser, char token_chars[MAX_TOKEN_LENGTH]) {
   int curr_length = 0;
   char curr = fgetc(parser->file);
@@ -21,8 +25,14 @@ static bool next_word(crust_parser* parser, char token_chars[MAX_TOKEN_LENGTH]) 
   return true;
 }
 
+
+static bool match_token(crust_parser* parser, crust_token* output) {
+   
+}
+
 bool crust_parser_init(curst_parser* to_init, char* file_name) {
   to_init->file = fopen(file_name, "rb+");
+  to_init->buffer = '\0';
   return to_init->file != NULL;
 }
 
