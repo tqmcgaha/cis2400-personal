@@ -1,0 +1,56 @@
+https://www.complang.tuwien.ac.at/forth/gforth/Docs-html/index.html#Top
+https://forth-standard.org/standard/core/toBODY
+https://www.forth.org/forth_coding.html#ref1
+
+.                     print top thing as int
+.s                    print stack
+number in decimal
+number in hex
+
+binary arith ops
+  + 
+  -
+  *
+  /
+  %
+ u+
+ u-
+ u*
+ u/
+ u%
+
+stack manips
+  drop
+  nip  ?
+  dup
+  over ?
+  tuck ?
+  swap
+  pick ???
+  rot
+  -rot ??
+
+
+:      start fn
+;      end fn
+{      begin args
+}      end args
+
+&    bitwise and
+|    bitwise or
+^    bitwise xor
+~    bitwise invert
+!    logical bang
+
+BEGIN
+WHILE
+REPEAT
+UNTIL
+
+if
+else
+endif
+
+(      start multi line comment
+)      ends multi line comment
+\      single linen comment
