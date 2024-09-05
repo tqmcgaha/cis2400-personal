@@ -1,9 +1,7 @@
-#ifndef CSTRING_H_
-#define CSTRING_H_
-
 #include "./cstring.h"
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 char* cstrcpy(char *dest, char *src) {
   unsigned int index = 0;
@@ -55,7 +53,7 @@ char* cstrstr(char *str, char *target) {
   return NULL;
 }
 
-char* cstrpbmrk(char *str, char *target) {
+char* cstrpbrk(char *str, char *target) {
   unsigned int len = cstrlen(str);
   unsigned int target_len = cstrlen(target);
   for (unsigned int i = 0; i < len; i++) {
@@ -83,7 +81,7 @@ int cstrcmp(char *lhs, char *rhs) {
   return lhs[min] - rhs[min];
 }
 
-void *cmemset(void *s, char c, unsigned int n) {
+void *cmemset(void *s, unsigned char c, unsigned int n) {
   char* ptr = (char*) s;
   for (unsigned int i = 0; i < n; i++) {
     ptr[i] = c;
@@ -92,10 +90,10 @@ void *cmemset(void *s, char c, unsigned int n) {
 }
 
 void *cmemcpy(void *dest, void *src, unsigned int n) {
-  char* dest_ptr = (char*) s;
-  char* src_ptr = (char*) s;
+  char* dest_ptr = (char*) dest;
+  char* src_ptr = (char*) src;
   for (unsigned int i = 0; i < n; i++) {
-    dest_ptr[i] = src_ptr;
+    dest_ptr[i] = src_ptr[i];
   }
   return dest;
 }
@@ -105,26 +103,38 @@ char* cstrtok_r(char* input, char* delims, char** save_ptr) {
     input = *save_ptr;
   }
 
-  char* end = input;
   unsigned int len = cstrlen(input);
   
   if (len == 0) {
     return NULL;
   }
 
-  for (unsigned int = 0; i < len; i++) {
-    if (cstrchr(delims, input[i]) != NULL) {
-      char* result = malloc((i + 1) * sizeof(char));
-      cmemcpy(result, input, i);
-      result[i] = '\0';
+  int start = -1; // index to start of token
+
+  for (unsigned int i = 0; i < len; i++) {
+    // if we are on a delim and have started a token
+    bool on_delim = cstrchr(delims, input[i]) != NULL;
+
+    if (on_delim  && start != -1) {
+      char* result = malloc((i + 1 - start) * sizeof(char));
+      cmemcpy(result, input + start, i - start);
+      result[i - start] = '\0';
       *save_ptr = input + i + 1;
       return result;
+    } else if (start == -1 && !on_delim) {
+      start = i;
     }
   }
+
+  if (start != -1) {
+    char* result = malloc((len + 1 - start) * sizeof(char));
+    cmemcpy(result, input + start, len - start);
+    result[len - start] = '\0';
+    *save_ptr = input + len;
+    return result;
+  }
+
   *save_ptr = input + len;
   return NULL;
 }
-
-
-#endif  // CSTRING_H_
 
