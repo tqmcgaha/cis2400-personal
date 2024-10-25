@@ -3,6 +3,8 @@
 
 #include <cstdint>  // for sized integers
 #include <string>   // for string
+#include <ostream>
+#include <istream>
 
 enum class InstructionType {
   R_TYPE,
@@ -26,6 +28,10 @@ struct Instruction {
   uint32_t encoding;
   std::string mnemonic;
 };
+
+std::ostream& operator<<(std::ostream& stream, const Instruction& instr);
+
+std::istream& operator>>(std::istream& stream, Instruction& instr);
 
 Instruction decode_instruction(uint32_t instruction);
 

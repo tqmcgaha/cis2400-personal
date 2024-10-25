@@ -48,4 +48,6 @@ bool stdout_putc(char c);
 
 bool stdin_getc(char* out);
 
+extern int errno;
+
 #endif  // RISCV_CSTDLIB_H_

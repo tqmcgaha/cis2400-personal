@@ -9,12 +9,15 @@ using std::dec;
 using std::endl;
 using std::string;
 using std::stringstream;
+using std::ostream;
+using std::istream;
 
 void decode_r_type(Instruction& instr);
 void decode_i_type(Instruction& instr);
-void decode_j_type(Instruction& instr);
 void decode_s_type(Instruction& instr);
 void decode_b_type(Instruction& instr);
+void decode_u_type(Instruction& instr);
+void decode_j_type(Instruction& instr);
 
 Instruction decode_instruction(uint32_t instruction) {
   Instruction instr;
@@ -58,8 +61,17 @@ Instruction decode_instruction(uint32_t instruction) {
       instr.type = InstructionType::J_TYPE;
       decode_j_type(instr);
       break;
+    case 0x37: // U type
+      instr.type = InstructionType::U_TYPE;
+      decode_u_type(instr);
+      break;
+    case 0x17: // U type
+      instr.type = InstructionType::U_TYPE;
+      decode_u_type(instr);
+      break;
     default:
-      std::cerr << std::hex << instr.opcode << std::endl;
+      std::cerr << "ERROR IN DECODE: UNIDENTIFIED OPCODE: "<< std::hex << instr.opcode << std::endl;
+      std::cerr << "ENCODING: 0x" << std::setfill('0') << std::setw(8) << instr.encoding << endl;
       instr.mnemonic = "CAN'T DETECT, GET TRAVIS TO LOOK AT IT. decoder.cpp:63";
   }
   return instr;
@@ -327,4 +339,16 @@ string instr_to_string(const Instruction& instr) {
     exit(EXIT_FAILURE);
   }
   return ss.str();
+}
+
+ostream& operator<<(ostream& stream, const Instruction& instr) {
+  stream << instr_to_string(instr);
+  return stream;
+}
+
+istream& operator>>(istream& stream, Instruction& instr) {
+  int32_t encoding;
+  stream >> encoding;
+  instr = decode_instruction(encoding);
+  return stream;
 }
