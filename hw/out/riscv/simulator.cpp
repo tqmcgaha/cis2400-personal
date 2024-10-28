@@ -46,12 +46,14 @@ std::expected<uint32_t, std::string> riscv_prog::run() {
   // or encountered some other issue
   // or hit a breakpoint.
 
-  if (this->instructions_run >= this->instruction_limit) {
+  // TODO: not running
+
+  if (this->instructions_run >= this->instruction_limit && this->instruction_limit != 0U) {
     return unexpected("Hit the instruction limit");
   }
 
   while (!this->breakpoints.contains(this->program_counter) &&
-         this->instructions_run < this->instruction_limit) {
+         (this->instructions_run >= this->instruction_limit || this->instruction_limit == 0U)) {
     auto res = this->step();
     if (!res) {
       return unexpected(res.error());
@@ -78,7 +80,9 @@ void riscv_prog::clear_instrs_run() {
 }
 
 void riscv_prog::set_register(uint32_t reg_num, int32_t value) {
-  this->registers.at(reg_num) = value;
+  if (reg_num != 0) {
+    this->registers.at(reg_num) = value;
+  }
 }
 
 void riscv_prog::set_pc(uint32_t value) {
@@ -178,82 +182,82 @@ std::optional<std::string> riscv_prog::execute_r_type() {
 
   const Instruction& instr = this->mem.text.at(this->program_counter);
   if (instr.mnemonic == "add") {
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) + this->registers.at(instr.rs2);
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) + this->registers.at(instr.rs2));
   } else if (instr.mnemonic == "sub") {
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) - this->registers.at(instr.rs2);
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) - this->registers.at(instr.rs2));
   } else if (instr.mnemonic == "sll") {
-    this->registers.at(instr.rd) = this->registers.at(instr.rs1)
-                                   << (this->registers.at(instr.rs2) & 0x01F);
+    this->set_register(instr.rd, this->registers.at(instr.rs1)
+                                   << (this->registers.at(instr.rs2) & 0x01F));
   } else if (instr.mnemonic == "slt") {
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) < this->registers.at(instr.rs2) ? 1 : 0;
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) < this->registers.at(instr.rs2) ? 1 : 0);
   } else if (instr.mnemonic == "sltu") {
-    this->registers.at(instr.rd) =
+    this->set_register(instr.rd, 
         static_cast<uint32_t>(this->registers.at(instr.rs1)) <
                 static_cast<uint32_t>(this->registers.at(instr.rs2))
             ? 1
-            : 0;
+            : 0);
   } else if (instr.mnemonic == "xor") {
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) ^ this->registers.at(instr.rs2);
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) ^ this->registers.at(instr.rs2));
   } else if (instr.mnemonic == "srl") {
-    this->registers.at(instr.rd) = static_cast<int32_t>(
+    this->set_register(instr.rd, static_cast<int32_t>(
         static_cast<uint32_t>(this->registers.at(instr.rs1)) >>
-        (this->registers.at(instr.rs2) & 0x01F));
+        (this->registers.at(instr.rs2) & 0x01F)));
   } else if (instr.mnemonic == "sra") {
-    this->registers.at(instr.rd) = this->registers.at(instr.rs1) >>
-                                   (this->registers.at(instr.rs2) & 0x01F);
+    this->set_register(instr.rd, this->registers.at(instr.rs1) >>
+                                   (this->registers.at(instr.rs2) & 0x01F));
   } else if (instr.mnemonic == "or") {
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) | this->registers.at(instr.rs2);
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) | this->registers.at(instr.rs2));
   } else if (instr.mnemonic == "and") {
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) & this->registers.at(instr.rs2);
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) & this->registers.at(instr.rs2));
   } else if (instr.mnemonic == "mul") {
     int64_t res = this->registers.at(instr.rs1) * this->registers.at(instr.rs2);
-    this->registers.at(instr.rd) = static_cast<int32_t>(res & 0xFFFFFFFF);
+    this->set_register(instr.rd, static_cast<int32_t>(res & 0xFFFFFFFF));
   } else if (instr.mnemonic == "mulh") {
     int64_t res = this->registers.at(instr.rs1) * this->registers.at(instr.rs2);
-    this->registers.at(instr.rd) =
-        static_cast<int32_t>((res >> 32) & 0xFFFFFFFF);
+    this->set_register(instr.rd, 
+        static_cast<int32_t>((res >> 32) & 0xFFFFFFFF));
   } else if (instr.mnemonic == "mulhsu") {
     int64_t res = this->registers.at(instr.rs1) *
                   static_cast<uint32_t>(this->registers.at(instr.rs2));
-    this->registers.at(instr.rd) =
-        static_cast<int32_t>((res >> 32) & 0xFFFFFFFF);
+    this->set_register(instr.rd, 
+        static_cast<int32_t>((res >> 32) & 0xFFFFFFFF));
   } else if (instr.mnemonic == "mulhu") {
     int64_t res = static_cast<uint32_t>(this->registers.at(instr.rs1)) *
                   static_cast<uint32_t>(this->registers.at(instr.rs2));
-    this->registers.at(instr.rd) =
-        static_cast<int32_t>((res >> 32) & 0xFFFFFFFF);
+    this->set_register(instr.rd, 
+        static_cast<int32_t>((res >> 32) & 0xFFFFFFFF));
   } else if (instr.mnemonic == "div") {
     if (this->registers.at(instr.rs2) == 0) {
       return "Divide by Zero";
     }
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) / this->registers.at(instr.rs2);
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) / this->registers.at(instr.rs2));
   } else if (instr.mnemonic == "divu") {
     if (this->registers.at(instr.rs2) == 0) {
       return "Divide Unsigned by Zero";
     }
-    this->registers.at(instr.rd) = static_cast<int32_t>(
+    this->set_register(instr.rd, static_cast<int32_t>(
         static_cast<uint32_t>(this->registers.at(instr.rs1)) /
-        static_cast<uint32_t>(this->registers.at(instr.rs2)));
+        static_cast<uint32_t>(this->registers.at(instr.rs2))));
   } else if (instr.mnemonic == "rem") {
     if (this->registers.at(instr.rs2) == 0) {
       return "Modulo by Zero";
     }
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) % this->registers.at(instr.rs2);
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) % this->registers.at(instr.rs2));
   } else if (instr.mnemonic == "remu") {
     if (this->registers.at(instr.rs2) == 0) {
       return "Modulo Unsigned by Zero";
     }
-    this->registers.at(instr.rd) = static_cast<int32_t>(
+    this->set_register(instr.rd, static_cast<int32_t>(
         static_cast<uint32_t>(this->registers.at(instr.rs1)) %
-        static_cast<uint32_t>(this->registers.at(instr.rs2)));
+        static_cast<uint32_t>(this->registers.at(instr.rs2))));
   } else {
     return "ILLEGAL R TYPE INSTRUCTION";
   }
@@ -274,7 +278,7 @@ std::optional<std::string> riscv_prog::execute_i_type() {
              "after JALR!";
     }
 
-    this->registers.at(instr.rd) = this->program_counter + 4;
+    this->set_register(instr.rd, this->program_counter + 4);
     this->program_counter = new_pc;
     return nullopt;
   }
@@ -285,29 +289,29 @@ std::optional<std::string> riscv_prog::execute_i_type() {
 
   // All other I type instructions
   if (instr.mnemonic == "addi") {
-    this->registers.at(instr.rd) = this->registers.at(instr.rs1) + instr.imm;
+    this->set_register(instr.rd, this->registers.at(instr.rs1) + instr.imm);
   } else if (instr.mnemonic == "slti") {
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) < instr.imm ? 1 : 0;
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) < instr.imm ? 1 : 0);
   } else if (instr.mnemonic == "sltiu") {
-    this->registers.at(instr.rd) =
-        static_cast<uint32_t>(this->registers.at(instr.rs1)) < instr.uimm ? 1 : 0;
+    this->set_register(instr.rd, 
+        static_cast<uint32_t>(this->registers.at(instr.rs1)) < instr.uimm ? 1 : 0);
   } else if (instr.mnemonic == "xori") {
-    this->registers.at(instr.rd) = this->registers.at(instr.rs1) ^ instr.imm;
+    this->set_register(instr.rd, this->registers.at(instr.rs1) ^ instr.imm);
   } else if (instr.mnemonic == "ori") {
-    this->registers.at(instr.rd) = this->registers.at(instr.rs1) | instr.imm;
+    this->set_register(instr.rd, this->registers.at(instr.rs1) | instr.imm);
   } else if (instr.mnemonic == "andi") {
-    this->registers.at(instr.rd) = this->registers.at(instr.rs1) & instr.imm;
+    this->set_register(instr.rd, this->registers.at(instr.rs1) & instr.imm);
   } else if (instr.mnemonic == "slli") {
-    this->registers.at(instr.rd) = this->registers.at(instr.rs1)
-                                   << (instr.imm & 0x1F);
+    this->set_register(instr.rd, this->registers.at(instr.rs1)
+                                   << (instr.imm & 0x1F));
   } else if (instr.mnemonic == "srli") {
-    this->registers.at(instr.rd) = static_cast<int32_t>(
+    this->set_register(instr.rd, static_cast<int32_t>(
         static_cast<uint32_t>(this->registers.at(instr.rs1) >>
-        (instr.imm & 0x1F)));
+        (instr.imm & 0x1F))));
   } else if (instr.mnemonic == "srai") {
-    this->registers.at(instr.rd) =
-        this->registers.at(instr.rs1) >> (instr.imm & 0x1F);
+    this->set_register(instr.rd, 
+        this->registers.at(instr.rs1) >> (instr.imm & 0x1F));
   } else if (instr.mnemonic == "lb") {
     uint32_t addr =
         static_cast<uint32_t>(this->registers.at(instr.rs1) + instr.imm);
@@ -315,8 +319,9 @@ std::optional<std::string> riscv_prog::execute_i_type() {
         addr >= INITIAL_DATA_OFFSET + SEGMENT_SIZE) {
       return "Tries to load bytes from non-data memory";
     }
-    this->registers.at(instr.rd) =
-        static_cast<int32_t>(static_cast<int8_t>(this->mem.data.at(addr)));
+    addr -= INITIAL_DATA_OFFSET;
+    this->set_register(instr.rd, 
+        static_cast<int32_t>(static_cast<int8_t>(this->mem.data.at(addr))));
   } else if (instr.mnemonic == "lh") {
     uint32_t addr =
         static_cast<uint32_t>(this->registers.at(instr.rs1) + instr.imm);
@@ -324,8 +329,9 @@ std::optional<std::string> riscv_prog::execute_i_type() {
         addr >= INITIAL_DATA_OFFSET + SEGMENT_SIZE - 1) {
       return "Tries to load bytes from non-data memory";
     }
-    this->registers.at(instr.rd) = static_cast<int32_t>(
-        *reinterpret_cast<int16_t*>(&(this->mem.data.at(addr))));
+    addr -= INITIAL_DATA_OFFSET;
+    this->set_register(instr.rd, static_cast<int32_t>(
+        *reinterpret_cast<int16_t*>(&(this->mem.data.at(addr)))));
   } else if (instr.mnemonic == "lw") {
     uint32_t addr =
         static_cast<uint32_t>(this->registers.at(instr.rs1) + instr.imm);
@@ -333,8 +339,9 @@ std::optional<std::string> riscv_prog::execute_i_type() {
         addr >= INITIAL_DATA_OFFSET + SEGMENT_SIZE - 3) {
       return "Tries to load bytes from non-data memory";
     }
-    this->registers.at(instr.rd) =
-        *reinterpret_cast<int32_t*>(&(this->mem.data.at(addr)));
+    addr -= INITIAL_DATA_OFFSET;
+    this->set_register(instr.rd, 
+        *reinterpret_cast<int32_t*>(&(this->mem.data.at(addr))));
   } else if (instr.mnemonic == "lbu") {
     uint32_t addr =
         static_cast<uint32_t>(this->registers.at(instr.rs1) + instr.imm);
@@ -342,8 +349,9 @@ std::optional<std::string> riscv_prog::execute_i_type() {
         addr >= INITIAL_DATA_OFFSET + SEGMENT_SIZE) {
       return "Tries to load bytes from non-data memory";
     }
-    this->registers.at(instr.rd) =
-        static_cast<int32_t>(static_cast<uint8_t>(this->mem.data.at(addr)));
+    addr -= INITIAL_DATA_OFFSET;
+    this->set_register(instr.rd, 
+        static_cast<int32_t>(static_cast<uint8_t>(this->mem.data.at(addr))));
   } else if (instr.mnemonic == "lhu") {
     uint32_t addr =
         static_cast<uint32_t>(this->registers.at(instr.rs1) + instr.imm);
@@ -351,8 +359,9 @@ std::optional<std::string> riscv_prog::execute_i_type() {
         addr >= INITIAL_DATA_OFFSET + SEGMENT_SIZE - 1) {
       return "Tries to load bytes from non-data memory";
     }
-    this->registers.at(instr.rd) = static_cast<int32_t>(
-        *reinterpret_cast<uint16_t*>(&(this->mem.data.at(addr))));
+    addr -= INITIAL_DATA_OFFSET;
+    this->set_register(instr.rd, static_cast<int32_t>(
+        *reinterpret_cast<uint16_t*>(&(this->mem.data.at(addr)))));
   } else {
     return "ILLEGAL I TYPE INSTRUCTION";
   }
@@ -376,12 +385,14 @@ std::optional<std::string> riscv_prog::execute_s_type() {
         addr >= INITIAL_DATA_OFFSET + SEGMENT_SIZE) {
       return "Tries to store bytes to non-data memory";
     }
+    addr -= INITIAL_DATA_OFFSET;
     this->mem.data.at(addr) = static_cast<byte>(this->registers.at(instr.rs2) & 0xFF);
   } else if (instr.mnemonic == "sh") {
     if (addr < INITIAL_DATA_OFFSET ||
         addr >= INITIAL_DATA_OFFSET + SEGMENT_SIZE - 1) {
       return "Tries to store bytes to non-data memory";
     }
+    addr -= INITIAL_DATA_OFFSET;
     this->mem.data.at(addr) = static_cast<byte>(this->registers.at(instr.rs2) & 0xFF);
     this->mem.data.at(addr + 1) =
         static_cast<byte>((this->registers.at(instr.rs2) >> 8) & 0xFF);
@@ -390,6 +401,7 @@ std::optional<std::string> riscv_prog::execute_s_type() {
         addr >= INITIAL_DATA_OFFSET + SEGMENT_SIZE - 3) {
       return "Tries to store bytes to non-data memory";
     }
+    addr -= INITIAL_DATA_OFFSET;
     this->mem.data.at(addr) = static_cast<byte>(this->registers.at(instr.rs2) & 0xFF);
     this->mem.data.at(addr + 1) =
         static_cast<byte>((this->registers.at(instr.rs2) >> 8) & 0xFF);
@@ -451,9 +463,9 @@ std::optional<std::string> riscv_prog::execute_u_type() {
   const Instruction& instr = this->mem.text.at(this->program_counter);
 
   if (instr.mnemonic == "lui") {
-    this->registers.at(instr.rd) = (instr.imm << 20);
+    this->set_register(instr.rd, (instr.imm << 20));
   } else if (instr.mnemonic == "auipc") {
-    this->registers.at(instr.rd) = this->program_counter + (instr.imm << 20);
+    this->set_register(instr.rd, this->program_counter + (instr.imm << 20));
   } else {
     return "ILLEGAL U TYPE INSTRUCTION";
   }
@@ -476,7 +488,7 @@ std::optional<std::string> riscv_prog::execute_j_type() {
            "JAL!";
   }
 
-  this->registers.at(instr.rd) = this->program_counter + 4;
+  this->set_register(instr.rd, this->program_counter + 4);
   this->program_counter = new_pc;
 
   return nullopt;

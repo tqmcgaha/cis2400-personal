@@ -8,7 +8,7 @@ HPP_SOURCES = decoder.hpp elf_loader.hpp simulator.hpp loader.hpp
 
 .PHONY = all clean format
 
-all: cstdlib.o cstdlib.s cstdlib.hexdump disas c_main test_riscv_main.o handwritten.o single_linker loader
+all: cstdlib.o cstdlib.s cstdlib.hexdump disas c_main test_riscv_main.o handwritten.o single_linker loader penn-sim
 
 cstdlib.o: cstdlib.s
 	$(CC) $(CFLAGS) -c $<
@@ -52,16 +52,19 @@ single_linker: single_linker.o decoder.o elf_loader.o
 loader.o: loader.cpp riscv_constants.hpp decoder.hpp
 	$(CXX) $(CXXFLAGS) -c $<
 
-loader: loader.o decoder.o
+loader_main.o: loader_main.cpp loader.hpp decoder.hpp
+	$(CXX) $(CXXFLAGS) -c $<
+
+loader: loader_main.o loader.o decoder.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 simulator.o: simulator.cpp simulator.hpp decoder.hpp loader.hpp
 	$(CXX) $(CXXFLAGS) -c $<
         
-penn_sim.o: penn_sim.cpp simulator.hpp decoder.hpp
+penn-sim.o: penn-sim.cpp simulator.hpp decoder.hpp
 	$(CXX) $(CXXFLAGS) -c $<
 
-penn-sim: penn_sim.o simulator.o loader.o decoder.o
+penn-sim: penn-sim.o simulator.o loader.o decoder.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # c_main is used for trying to figure out

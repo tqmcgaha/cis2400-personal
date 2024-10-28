@@ -52,16 +52,22 @@ struct riscv_elf {
   std::vector<Instruction> text;
 
   // .bss
+  section bss;
 
   // .sbss
+  section sbss;
 
   // .data
+  section data;
 
   // .data1
+  section data1;
 
   // .rodata
+  section rodata;
 
   // .rodata1
+  section rodata1;
 
   // .symtab
   std::vector<symbol> symtab;

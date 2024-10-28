@@ -9,7 +9,11 @@
 #include <unordered_map>
 #include <vector>
 
+#include <iostream>
+
 struct riscv_mem {
+  riscv_mem() : data(SEGMENT_SIZE) { std::cerr << data.size() << std::endl; };
+
   std::unordered_map<uint32_t, Instruction>
       text;                     // will be SEGMENT_SIZE / 4 in size
   std::vector<std::byte> data;  // will be SEGMENT_SIZE in size

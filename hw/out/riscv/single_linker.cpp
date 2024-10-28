@@ -14,9 +14,11 @@
 
 using namespace std;
 
-Instruction relocate_instruction(const Instruction& instruction,
+static Instruction relocate_instruction(const Instruction& instruction,
                                  int32_t instr_address,
                                  int32_t label_address);
+
+static bool write_data_section(const section& section, FILE* elf_file, uint32_t& data_offset);
 
 struct fcloser {
   void operator()(FILE* f) const { fclose(f); }
@@ -98,6 +100,10 @@ int main(int argc, char* argv[]) {
       symbol.value += curr_code_offset;
     }
 
+    if (elf.section_names.at(symbol.sh_index) == ".data") {
+      symbol.value += curr_data_offset;
+    }
+
     // in multi-file will need to change non-global symbols to be unique
     // and record all global labels
 
@@ -151,9 +157,42 @@ int main(int argc, char* argv[]) {
     fwrite(&instr.encoding, sizeof(instr.encoding), 1, out_obj.get());
   }
 
+  curr_code_offset += (elf.text.size() * 4);
+
   /////////////////////////////////////////////////////////////////////////////
   // Writing xDADA
   /////////////////////////////////////////////////////////////////////////////
+
+  write_data_section(elf.data, out_obj.get(), curr_data_offset);
+  write_data_section(elf.bss, out_obj.get(), curr_data_offset);
+  write_data_section(elf.sbss, out_obj.get(), curr_data_offset);
+  write_data_section(elf.data1, out_obj.get(), curr_data_offset);
+  write_data_section(elf.rodata, out_obj.get(), curr_data_offset);
+  write_data_section(elf.rodata1, out_obj.get(), curr_data_offset);
+  
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Writing Symbols
+  /////////////////////////////////////////////////////////////////////////////
+
+  for (const auto& symbol : elf.symtab) {
+
+    // SYMB indicator
+    temp16 = SYMB_INDICATOR;
+    fwrite(&temp16, sizeof(temp16), 1, out_obj.get());
+
+    // address 
+    temp32 = symbol.value;
+    fwrite(&temp32, sizeof(temp32), 1, out_obj.get());
+
+    // name length
+    temp32 = symbol.name.length();
+    fwrite(&temp32, sizeof(temp32), 1, out_obj.get());
+
+    // name contents
+    fwrite(symbol.name.data(), 1, symbol.name.length(), out_obj.get());
+  }
+
 }
 
 static void r_relocate(Instruction& instr, int32_t label_address);
@@ -240,4 +279,24 @@ static void j_relocate(Instruction& instr, int32_t address) {
       (bit20 << 31) | (bit10_to_1 << 21) | (bit11 << 20) | (bit19_to_12 << 12);
 
   instr.encoding |= pattern;
+}
+
+static bool write_data_section(const section& section, FILE* out_obj, uint32_t& data_offset) {
+  if (section.contents.size() == 0U) {
+    // Nothing to write!
+    return true;
+  }
+  uint16_t indicator = DATA_INDICATOR;
+  fwrite(&indicator, sizeof(indicator), 1, out_obj);
+
+  fwrite(&data_offset, sizeof(data_offset), 1, out_obj);
+  
+  uint32_t size = section.contents.size();
+  fwrite(&size, sizeof(size), 1, out_obj);
+
+  fwrite(section.contents.data(), sizeof(byte), section.contents.size(), out_obj);
+
+  data_offset += size;
+
+  return true;
 }

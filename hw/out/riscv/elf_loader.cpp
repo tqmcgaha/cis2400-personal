@@ -65,6 +65,8 @@ static expected<vector<relocation>, string> read_rela_text(
     FILE* elf_file,
     const Elf32_Shdr& rela_text_header);
 
+static expected<section, string> read_section(FILE* elf_file, const Elf32_Shdr& section_header);
+
 struct lazy_fstream_guard {
   FILE* to_close = nullptr;
 
@@ -135,6 +137,8 @@ expected<riscv_elf, string> load_riscv32i_elf(const string& elf_fname) {
       result.text = text_res.value();
 
     } else if (strcmp(section_name, ".data") == 0) {
+      auto res = read_section(elf_file, s_hdr);
+      result.data = res.value();
     } else if (strcmp(section_name, ".bss") == 0) {
     } else if (strcmp(section_name, ".symtab") == 0) {
       auto symtab_res = read_symtab(elf_file, result.string_table, s_hdr);
@@ -281,6 +285,22 @@ static expected<vector<relocation>, string> read_rela_text(
     r.addend = rela.r_addend;
     res.push_back(r);
   }
+
+  return res;
+}
+
+static expected<section, string> read_section(FILE* elf_file, const Elf32_Shdr& section_header) {
+  fseek(elf_file, section_header.sh_offset, SEEK_SET);
+  vector<std::byte> contents(section_header.sh_size);
+  fread(contents.data(), sizeof(byte), contents.size(), elf_file);
+
+  for (auto b : contents) {
+    cerr << static_cast<char>(b) << endl;
+  }
+
+  section res;
+  res.header = section_header;
+  res.contents = move(contents);
 
   return res;
 }

@@ -31,7 +31,7 @@ expected<riscv_mem, string> load_riscv(const string& fname) {
     return unexpected("MAGIC WORD IS INCORRECT");
   }
 
-  riscv_mem mem{};
+  riscv_mem mem;
 
   while (!feof(obj.get())) {
     uint16_t section_header{};
@@ -75,9 +75,9 @@ void read_code(riscv_mem& mem, FILE* obj_file) {
   for (size_t i = 0; i < size; i++) {
     uint32_t instr{};
     fread(&instr, sizeof(instr), 1, obj_file);
-    mem.text[address + i] = decode_instruction(instr);
+    mem.text[address + (i * 4)] = decode_instruction(instr);
 
-    cout << mem.text[address + i] << endl;
+    // cout << mem.text[address + (i * 4)] << endl;
   }
 }
 
@@ -90,25 +90,31 @@ void read_data(riscv_mem& mem, FILE* obj_file) {
   address -= INITIAL_DATA_OFFSET;
 
   int res = fread(&(mem.data.at(address)), 1, size, obj_file);
-  if (res != size) {
+  if (static_cast<uint32_t>(res) != size) {
     cerr << "FUCK ME IN THE ASS: ASK TRAVIS TO INVESTIGATE" << endl;
     exit(EXIT_FAILURE);
   }
 }
 
-void read_symbol(riscv_mem& mem, FILE* obj_file) {}
+void read_symbol(riscv_mem& mem, FILE* obj_file) {
+  uint32_t address{};
+  uint32_t size{};
+  fread(&address, sizeof(address), 1, obj_file);
+  fread(&size, sizeof(size), 1, obj_file);
+
+  string name{};
+  name.reserve(size);
+
+  for (size_t i = 0; i < size; i++) {
+    char c;
+    fread(&c, sizeof(c), 1, obj_file);
+    name += c;
+  }
+  mem.label_to_addr[name] = address;
+  mem.addr_to_labels[address].push_back(name);
+}
 
 void read_file(riscv_mem& mem, FILE* obj_file) {}
 
 void read_line(riscv_mem& mem, FILE* obj_file) {}
 
-int main(int argc, char* argv[]) {
-  if (argc != 2) {
-    cerr << "Usage: ./loader <riscv_obj>" << endl;
-    return EXIT_FAILURE;
-  }
-
-  string fname{argv[1]};
-
-  riscv_mem mem = load_riscv(fname).value();
-}

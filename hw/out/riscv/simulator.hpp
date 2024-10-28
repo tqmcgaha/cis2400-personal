@@ -9,7 +9,7 @@
 #include <span>
 #include <string>
 #include <unordered_map>
-#include <unordered_set>
+#include <set>
 
 constexpr uint64_t ONE_MILLION = 1000000;
 constexpr size_t NUM_REGISTERS = 32U;
@@ -60,16 +60,18 @@ class riscv_prog {
 
   friend std::expected<riscv_prog, std::string> load_riscv_prog(
     const std::string& fname);
+
+  riscv_mem mem;
+
  private:
   // data members
-  std::array<int32_t, NUM_REGISTERS> registers;
-  uint32_t program_counter;
-  riscv_mem mem;
-  std::unordered_set<uint32_t> breakpoints;
-  std::unordered_set<uint32_t> addresses_read;
-  std::unordered_set<uint32_t> addresses_written;
-  uint64_t instructions_run;
-  uint64_t instruction_limit;
+  std::array<int32_t, NUM_REGISTERS> registers {};
+  uint32_t program_counter = 0U;
+  std::set<uint32_t> breakpoints;
+  std::set<uint32_t> addresses_read;
+  std::set<uint32_t> addresses_written;
+  uint64_t instructions_run = 0U;
+  uint64_t instruction_limit = 0U;
 
   std::optional<std::string> execute_r_type();
   std::optional<std::string> execute_i_type();
@@ -79,6 +81,8 @@ class riscv_prog {
   std::optional<std::string> execute_j_type();
 };
 
+
+std::expected<riscv_prog, std::string> load_riscv_prog(const std::string& fname);
 
 template <typename T>
 concept byte_copyable = std::is_trivially_copyable_v<T>;
