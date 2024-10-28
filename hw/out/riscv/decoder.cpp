@@ -7,10 +7,10 @@ using std::cerr;
 using std::cout;
 using std::dec;
 using std::endl;
+using std::istream;
+using std::ostream;
 using std::string;
 using std::stringstream;
-using std::ostream;
-using std::istream;
 
 void decode_r_type(Instruction& instr);
 void decode_i_type(Instruction& instr);
@@ -57,21 +57,23 @@ Instruction decode_instruction(uint32_t instruction) {
       instr.type = InstructionType::B_TYPE;
       decode_b_type(instr);
       break;
-    case 0x6F: // J type
+    case 0x6F:  // J type
       instr.type = InstructionType::J_TYPE;
       decode_j_type(instr);
       break;
-    case 0x37: // U type
+    case 0x37:  // U type
       instr.type = InstructionType::U_TYPE;
       decode_u_type(instr);
       break;
-    case 0x17: // U type
+    case 0x17:  // U type
       instr.type = InstructionType::U_TYPE;
       decode_u_type(instr);
       break;
     default:
-      std::cerr << "ERROR IN DECODE: UNIDENTIFIED OPCODE: "<< std::hex << instr.opcode << std::endl;
-      std::cerr << "ENCODING: 0x" << std::setfill('0') << std::setw(8) << instr.encoding << endl;
+      std::cerr << "ERROR IN DECODE: UNIDENTIFIED OPCODE: " << std::hex
+                << instr.opcode << std::endl;
+      std::cerr << "ENCODING: 0x" << std::setfill('0') << std::setw(8)
+                << instr.encoding << endl;
       instr.mnemonic = "CAN'T DETECT, GET TRAVIS TO LOOK AT IT. decoder.cpp:63";
   }
   return instr;
@@ -287,6 +289,7 @@ void decode_b_type(Instruction& instr) {
 
 void decode_u_type(Instruction& instr) {
   instr.imm = instr.encoding & 0xFFFFF000;
+  instr.imm = instr.imm >> 20;
 
   switch (instr.opcode) {
     case 0x37:

@@ -2,9 +2,9 @@
 #define DECODER_HPP_
 
 #include <cstdint>  // for sized integers
-#include <string>   // for string
-#include <ostream>
 #include <istream>
+#include <ostream>
+#include <string>  // for string
 
 enum class InstructionType {
   R_TYPE,

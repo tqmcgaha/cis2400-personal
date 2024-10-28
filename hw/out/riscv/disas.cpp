@@ -1,16 +1,21 @@
 #include "./decoder.hpp"
-#include "./loader.hpp"
+#include "./elf_loader.hpp"
 
 #include <cstdlib>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 using namespace std;
 
 int main() {
-  //auto res = load_riscv32i_elf("cstdlib.o");
+  // auto res = load_riscv32i_elf("cstdlib.o");
   auto res = load_riscv32i_elf("handwritten.o");
-  //auto res = load_riscv32i_elf("test_riscv_main.o");
+  // auto res = load_riscv32i_elf("test_riscv_main.o");
+
+  if (!res) {
+    cerr << res.error() << endl;
+    return EXIT_FAILURE;
+  }
 
   riscv_elf state = std::move(res.value());
 
@@ -26,29 +31,31 @@ int main() {
   // size = size << 32;
 
   for (const auto& sym : state.symtab) {
-    cout << sym.name << " index: " << dec << sym.index << " size: " << sym.size << endl;
+    cout << sym.name << " index: " << dec << sym.value << " size: " << sym.size
+         << endl;
   }
 
   for (const auto& p : state.relocations[".text"]) {
-    cout << "addr: " << hex << setw(8) << setfill('0') << p.addr << endl;;
+    cout << "addr: " << hex << setw(8) << setfill('0') << p.addr << endl;
+    ;
     cout << "symbol_index: " << p.symbol_index << endl;
     cout << "type: " << static_cast<unsigned int>(p.type) << endl;
     cout << "addend: " << p.addend << endl;
   }
 
-  // cout << "The address of main is: 0x" << std::setfill('0') << std::setw(16) << std::hex << &main << endl;
+  // cout << "The address of main is: 0x" << std::setfill('0') << std::setw(16)
+  // << std::hex << &main << endl;
 
-/*
-  std::cout << std::dec << size << std::endl;
+  /*
+    std::cout << std::dec << size << std::endl;
 
-  uint8_t* rv32_mem = (uint8_t *) malloc(sizeof(uint8_t) * size);
-  
-  std::cout << "PLEASE WORK DEAR GOD" << std::endl;
-  std::cout << sizeof(size_t) << std::endl;
+    uint8_t* rv32_mem = (uint8_t *) malloc(sizeof(uint8_t) * size);
 
-  free(rv32_mem);
+    std::cout << "PLEASE WORK DEAR GOD" << std::endl;
+    std::cout << sizeof(size_t) << std::endl;
 
-  std::cout << "please" << std::endl;
-*/
+    free(rv32_mem);
 
+    std::cout << "please" << std::endl;
+  */
 }
